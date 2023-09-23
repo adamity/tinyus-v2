@@ -14,7 +14,19 @@ class Click extends Model
     protected $fillable = [
         'shortened_url_id',
         'ip_address',
-        'user_agent',
+        'referrer',
+        'operating_system',
+        'operating_system_version',
+        'browser',
+        'browser_version',
+        'is_mobile',
+        'is_tablet',
+        'is_desktop',
+        'is_phone',
+        'country',
+        'city',
+        'region',
+        'is_expired'
     ];
 
     public function shortened_url()

@@ -166,6 +166,64 @@ class ShortenController extends Controller
         ], 200);
     }
 
+    public function stats($hash)
+    {
+        $shortened_url = ShortenedUrl::withTrashed()->where('hash', '=', $hash)->first();
+        if (!$shortened_url) {
+            return response()->json([
+                'message' => 'Shortened URL not found.',
+            ], 404);
+        }
+
+        $clicks = $shortened_url->clicks()->get();
+        $total_clicks = count($clicks);
+
+        $unique_clicks = [];
+        foreach ($clicks as $click) {
+            if (!in_array($click->ip_address, $unique_clicks)) {
+                $unique_clicks[] = $click->ip_address;
+            }
+        }
+        $total_unique_clicks = count($unique_clicks);
+
+        $qr_clicks = $clicks->where('referrer', '=', 'qr')->count();
+
+        $unique_qr_clicks = [];
+        foreach ($clicks as $click) {
+            if ($click->referrer === 'qr' && !in_array($click->ip_address, $unique_qr_clicks)) {
+                $unique_qr_clicks[] = $click->ip_address;
+            }
+        }
+        $unique_qr_clicks = count($unique_qr_clicks);
+
+        $clicks_by_os = $clicks->groupBy('operating_system')->map(function ($item, $key) {
+            return count($item);
+        });
+
+        $clicks_by_browser = $clicks->groupBy('browser')->map(function ($item, $key) {
+            return count($item);
+        });
+
+        $clicks_by_country = $clicks->groupBy('country')->map(function ($item, $key) {
+            return count($item);
+        });
+
+        $analytics = [
+            'total_clicks' => $total_clicks,
+            'total_unique_clicks' => $total_unique_clicks,
+            'qr_clicks' => $qr_clicks,
+            'unique_qr_clicks' => $unique_qr_clicks,
+            'clicks_by_os' => $clicks_by_os,
+            'clicks_by_browser' => $clicks_by_browser,
+            'clicks_by_country' => $clicks_by_country,
+        ];
+
+        return response()->json([
+            'message' => 'Successfully retrieved shortened URL stats.',
+            'data' => $analytics,
+        ], 200);
+    }
+
     private function generate_uuid()
     {
         $uuid = Uuid::uuid4();

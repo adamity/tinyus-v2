@@ -36,3 +36,6 @@ Route::delete('/shorten/{id}', [ShortenController::class, 'destroy']); // Admin 
 
 // Restore a shortened URL route
 Route::patch('/shorten/{id}', [ShortenController::class, 'restore']); // Admin only
+
+// Get a statistics of a shortened URL route
+Route::get('/stats/{hash}', [ShortenController::class, 'stats']); // Public
