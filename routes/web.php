@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\ShortenController::class, 'index']); // Public
+Route::get('/', [App\Http\Controllers\ShortenController::class, 'index'])->name('home'); // Public
+
+Route::get('/stats', [App\Http\Controllers\ShortenController::class, 'stats'])->name('stats'); // Public
 
 Route::get('/{hash}', [App\Http\Controllers\ShortenController::class, 'show']); // Public
