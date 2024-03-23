@@ -19,23 +19,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Shorten URL(s) route
-Route::post('/shorten', [ShortenController::class, 'store']); // Public
+Route::prefix('v1')->group(function () {
+    // Shorten URL(s) route
+    Route::post('/shorten', [ShortenController::class, 'store']); // Public
 
-// Get all shortened URLs route
-Route::get('/shorten', [ShortenController::class, 'index']); // Admin only
+    // Get all shortened URLs route
+    Route::get('/shorten', [ShortenController::class, 'index']); // Admin only
 
-// Get a shortened URL & its clicks route
-Route::get('/shorten/{id}', [ShortenController::class, 'show']); // Admin only
+    // Get a shortened URL & its clicks route
+    Route::get('/shorten/{id}', [ShortenController::class, 'show']); // Admin only
 
-// Update a shortened URL route
-Route::put('/shorten/{id}', [ShortenController::class, 'update']); // Admin only
+    // Update a shortened URL route
+    Route::put('/shorten/{id}', [ShortenController::class, 'update']); // Admin only
 
-// Delete a shortened URL route
-Route::delete('/shorten/{id}', [ShortenController::class, 'destroy']); // Admin only
+    // Delete a shortened URL route
+    Route::delete('/shorten/{id}', [ShortenController::class, 'destroy']); // Admin only
 
-// Restore a shortened URL route
-Route::patch('/shorten/{id}', [ShortenController::class, 'restore']); // Admin only
+    // Restore a shortened URL route
+    Route::patch('/shorten/{id}', [ShortenController::class, 'restore']); // Admin only
 
-// Get a statistics of a shortened URL route
-Route::get('/stats/{hash}', [ShortenController::class, 'stats']); // Public
+    // Get a statistics of a shortened URL route
+    Route::get('/stats/{hash}', [ShortenController::class, 'stats']); // Public
+});
