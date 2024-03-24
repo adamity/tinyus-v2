@@ -108,6 +108,18 @@ body {
     max-height: 80vh !important;
 }
 
+.min-vh-100 {
+    min-height: 100vh !important;
+}
+
+.w-100px {
+    width: 100px !important;
+}
+
+.w-200px {
+    width: 200px !important;
+}
+
 @media (min-width: 992px) {
     .vh-lg-85 {
         height: 85vh !important;
