@@ -6,7 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tinyus - URL Shortener</title>
 
-    <!-- Meta Tags -->
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Tinyus - URL Shortener">
+    <meta name="description" content="Tinyus is a simple URL shortener that allows you to shorten your long URLs into tiny URLs.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tinyus.microtion.com/">
+    <meta property="og:title" content="Tinyus - URL Shortener">
+    <meta property="og:description" content="Tinyus is a simple URL shortener that allows you to shorten your long URLs into tiny URLs.">
+    <meta property="og:image" content="{{ asset('images/tinyus_metatag.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tinyus.microtion.com/">
+    <meta property="twitter:title" content="Tinyus - URL Shortener">
+    <meta property="twitter:description" content="Tinyus is a simple URL shortener that allows you to shorten your long URLs into tiny URLs.">
+    <meta property="twitter:image" content="{{ asset('images/tinyus_metatag.png') }}">
+
+    <!-- Others -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤏</text></svg>">
 
     <!-- Font Awesome -->
