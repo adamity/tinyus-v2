@@ -1,7 +1,8 @@
 @extends('layout')
 
 @section('content')
-<div id="error-alert" class="alert alert-danger fixed-top text-center mx-md-5 my-md-3 border border-3 border-dark" role="alert"></div>
+<div id="error-alert" class="alert alert-danger fixed-top text-center mx-md-5 my-md-3 border border-3 border-dark" role="alert" style="display: none"></div>
+<div id="success-alert" class="alert alert-success fixed-top text-center mx-md-5 my-md-3 border border-3 border-dark" role="alert" style="display: none"></div>
 
 <div class="bg-milk-punch-highland border-bottom border-3 border-dark">
     <div class="bg-noise">
@@ -47,7 +48,7 @@
                         <div class="d-flex flex-column align-items-center">
                             <div class="d-flex">
                                 <input id="expiry-date" type="date" class="form-control form-control-sm border border-3 border-dark rounded-5 mx-1 w-200px" placeholder="Expiry Date" aria-label="Expiry Date" value="" min="{{ date('Y-m-d') }}">
-                                <button type="button" class="btn btn-sm btn-danger border border-3 border-dark rounded-5 shadow-none" onclick="document.getElementById('expiry-date').value = ''; document.getElementById('max-click').value = ''">🗑️</button>
+                                <button id="button-clean" type="button" class="btn btn-sm btn-danger border border-3 border-dark rounded-5 shadow-none" onclick="document.getElementById('expiry-date').value = ''; document.getElementById('max-click').value = ''">🗑️</button>
                             </div>
                             <p class="small m-0 ff-fredoka">Expiry Date</p>
                         </div>
@@ -56,17 +57,17 @@
             </div>
 
             <div class="card-body scroller p-2 p-md-3 p-lg-auto vh-80 vh-lg-auto">
-                <form>
-                    <div class="d-flex mb-3">
-                        <input name="url[]" type="text" class="form-control form-control-lg border border-3 border-dark rounded-5" placeholder="https://example.com/this-url-is-too-long" aria-label="https://example.com/this-url-is-too-long">
-                        <button type="button" class="btn btn-warning border border-3 border-dark rounded-5 shadow-none ms-1 ms-md-3 px-3" onclick="addInput()">➕</button>
-                    </div>
-                    <div id="addon-container"></div>
-                </form>
+                <div class="d-flex mb-3">
+                    <input name="url[]" type="text" class="form-control form-control-lg border border-3 border-dark rounded-5" placeholder="https://example.com/this-url-is-too-long" aria-label="https://example.com/this-url-is-too-long">
+                    <button id="button-add" type="button" class="btn btn-warning border border-3 border-dark rounded-5 shadow-none ms-1 ms-md-3 px-3" onclick="addInput()">➕</button>
+                </div>
+                <div id="addon-container"></div>
             </div>
 
             <div class="card-footer px-0 px-md-3 border-0 text-center">
-                <button type="button" class="btn btn-lg btn-amber border border-3 border-dark px-5 rounded-5" onclick="submit()">Go Tiny! 🤏</button>
+                <button type="button" class="btn btn-lg btn-amber border border-3 border-dark px-5 rounded-5 js-input-wrapper" onclick="submit()">Go Tiny! 🤏</button>
+                <input id="shortened-url" type="text" class="form-control form-control-lg border border-3 border-dark rounded-5 js-output-wrapper" placeholder="https://example.com/shortened-link-here" aria-label="https://example.com/shortened-link-here" disabled>
+                <button type="button" class="btn btn-lg btn-amber border border-3 border-dark px-5 rounded-5 mt-3 js-output-wrapper" onclick="copyToClipboard()">Copy URL 📋</button>
             </div>
         </div>
     </div>
@@ -75,7 +76,16 @@
 <script>
     let inclickTimeout;
     let declickTimeout;
-    document.getElementById('error-alert').setAttribute('style', 'display: none');
+
+    document.querySelectorAll('.js-output-wrapper').forEach(wrapper => {
+        wrapper.classList.add('d-none');
+    });
+
+    document.getElementById('expiry-date').value = '';
+    document.getElementById('max-click').value = '';
+    document.querySelectorAll('input[name="url[]"]').forEach(url => {
+        url.value = '';
+    });
 
     document.getElementById('button-inclick').addEventListener('mousedown', function() {
         inclickTimeout = setTimeout(function() {
@@ -126,7 +136,7 @@
         input.placeholder = 'https://example.com/this-url-is-too-long';
         input.setAttribute('aria-label', 'https://example.com/this-url-is-too-long');
 
-        button.className = 'btn btn-danger border border-3 border-dark rounded-5 shadow-none ms-1 ms-md-3 px-3';
+        button.className = 'btn btn-danger border border-3 border-dark rounded-5 shadow-none ms-1 ms-md-3 px-3 js-button-delete';
         button.type = 'button';
         button.setAttribute('onclick', 'deleteInput(this)');
         button.id = 'button-delete';
@@ -147,14 +157,25 @@
         return regex.test(url);
     }
 
-    function showAlert(message) {
-        document.getElementById('error-alert').innerHTML = message;
-        document.getElementById('error-alert').setAttribute('style', 'display: block');
+    function showAlert(message, type) {
+        document.getElementById(`${type}-alert`).innerHTML = message;
+        document.getElementById(`${type}-alert`).setAttribute('style', 'display: block');
 
         setTimeout(function() {
-            document.getElementById('error-alert').innerHTML = '';
-            document.getElementById('error-alert').setAttribute('style', 'display: none');
+            document.getElementById(`${type}-alert`).innerHTML = '';
+            document.getElementById(`${type}-alert`).setAttribute('style', 'display: none');
         }, 3000);
+    }
+
+    function copyToClipboard() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+
+        $temp.val($("#shortened-url").val()).select();
+        document.execCommand("copy");
+
+        $temp.remove();
+        showAlert('URL copied to clipboard', 'success');
     }
 
     function submit() {
@@ -176,18 +197,53 @@
         });
 
         if (request.urls.length == 0) {
-            // alert('Please enter at least one URL');
-            showAlert('Please enter at least one URL');
+            showAlert('Please enter at least one URL', 'error');
             return;
         }
 
         if (!valid) {
-            // alert('Please enter a valid URL');
-            showAlert('Please enter a valid URL');
+            showAlert('Please enter a valid URL', 'error');
             return;
         }
 
-        console.log(request);
+        $.ajax({
+            url: '{{ env('APP_URL') }}/api/v1/shorten',
+            type: 'POST',
+            data: JSON.stringify(request),
+            contentType: 'application/json',
+            success: function(response) {
+                showAlert('URLs shortened successfully', 'success');
+                document.getElementById('shortened-url').value = response.data.shortened_url;
+
+                document.querySelectorAll('.js-input-wrapper').forEach(wrapper => {
+                    wrapper.classList.add('d-none');
+                });
+
+                document.querySelectorAll('.js-output-wrapper').forEach(wrapper => {
+                    wrapper.classList.remove('d-none');
+                });
+
+                document.getElementById('max-click').disabled = true;
+                document.getElementById('expiry-date').disabled = true;
+
+                document.getElementById('button-inclick').disabled = true;
+                document.getElementById('button-declick').disabled = true;
+
+                document.getElementById('button-clean').disabled = true;
+                document.getElementById('button-add').disabled = true;
+
+                document.querySelectorAll('input[name="url[]"]').forEach(url => {
+                    url.disabled = true;
+                });
+
+                document.querySelectorAll('.js-button-delete').forEach(button => {
+                    button.disabled = true;
+                });
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
     }
 </script>
 @endsection
