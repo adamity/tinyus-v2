@@ -38,12 +38,13 @@
 
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav ms-auto mb-3 mb-lg-0 align-items-center">
-                    <li class="nav-item ms-lg-5">
+                    {{-- Note: Temporarily hide for MVP launch --}}
+                    {{-- <li class="nav-item ms-lg-5">
                         <a class="nav-link {{ $navitem['home'] ?? '' }}" aria-current="{{ isset($navitem['home']) ? 'page' : '' }}" href="{{ route('home') }}">Shorten</a>
                     </li>
                     <li class="nav-item ms-lg-5">
                         <a class="nav-link {{ $navitem['stats'] ?? '' }}" aria-current="{{ isset($navitem['stats']) ? 'page' : '' }}" href="{{ route('stats') }}">Analytics</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item ms-lg-5">
                         <a href="https://www.buymeacoffee.com/consistentcat" target="_blank">
                             <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" class="img-fluid btn-shadow-outline border border-3 border-dark" style="height: 35px">
@@ -71,6 +72,9 @@
 
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>
