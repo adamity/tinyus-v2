@@ -154,7 +154,8 @@
 
     function validateUrl(url) {
         const regex = /^(http|https):\/\/[^ "]+$/;
-        return regex.test(url);
+        const appUrl = '{{ env('APP_URL') }}';
+        return regex.test(url) && !url.includes(appUrl);
     }
 
     function showAlert(message, type) {
