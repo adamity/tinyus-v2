@@ -80,7 +80,7 @@
     <footer class="bg-highland bg-noise py-5 text-dark text-center">
         <div class="container">
             <p class="ff-fugaz fs-3 mb-3">Tinyus! 🤏</p>
-            <p class="mb-3">© 2023 Tinyus. All rights reserved.</p>
+            <p class="mb-3">© 2024 Tinyus. All rights reserved.</p>
             <p class="mb-0">Made with ❤️ by <a href="https://zulkiflizin.com" target="_blank" class="text-decoration-underline text-dark fw-semibold">Consistent Cat</a></p>
         </div>
     </footer>
